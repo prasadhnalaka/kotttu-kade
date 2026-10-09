@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRAZA'S KOTTU KADE | Colombo's Ultimate Street Sizzle</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Bebas Neue, Syne & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        street: {
+                            black: '#07080A',
+                            surface: '#0F1117',
+                            card: '#161922',
+                            border: '#232734',
+                            cheese: '#FFB800',
+                            cheeseglow: '#FFA000',
+                            chili: '#FF2E2E',
+                            flame: '#FF5E00',
+                            curry: '#C27803',
+                            neonGreen: '#00FF87'
+                        }
+                    },
+                    fontFamily: {
+                        bebas: ['Bebas Neue', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    animation: {
+                        'flicker': 'flicker 3s infinite',
+                        'float-slow': 'floating 5s ease-in-out infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'drip': 'cheeseDrip 2s ease-in-out infinite alternate',
+                        'blade-left': 'bladeLeft 0.15s ease-out',
+                        'blade-right': 'bladeRight 0.15s ease-out'
+                    },
+                    keyframes: {
+                        flicker: {
+                            '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': { opacity: '1', filter: 'drop-shadow(0 0 16px rgba(255, 184, 0, 0.8))' },
+                            '20%, 21.999%, 63%, 63.999%, 65%, 69.999%': { opacity: '0.4', filter: 'none' }
+                        },
+                        floating: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-10px) rotate(1deg)' }
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' }
+                        },
+                        cheeseDrip: {
+                            '0%': { transform: 'scaleY(1)' },
+                            '100%': { transform: 'scaleY(1.15)' }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        :root {
+            --glow-color: rgba(255, 184, 0, 0.35);
+        }
+
+        body {
+            background-color: #07080A;
+            color: #EDEDED;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(255, 94, 0, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 60%, rgba(255, 184, 0, 0.06) 0%, transparent 40%),
+                radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+            background-size: 100% 100%, 100% 100%, 30px 30px;
+        }
+
+        /* Screen Shake for Thawa Strike */
+        .screen-shake {
+            animation: shake 0.18s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, -1px, 0) rotate(-0.5deg); }
+            20%, 80% { transform: translate3d(3px, 2px, 0) rotate(0.5deg); }
+            30%, 50%, 70% { transform: translate3d(-3px, -2px, 0) rotate(-0.3deg); }
+            40%, 60% { transform: translate3d(3px, 1px, 0) rotate(0.3deg); }
+        }
+
+        /* Street Sticker Badges */
+        .street-sticker {
+            transform: rotate(-2deg);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+        }
+        .street-sticker:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 6px 6px 0px rgba(255, 184, 0, 0.6);
+        }
+
+        .neon-text-cheese {
+            text-shadow: 0 0 10px rgba(255, 184, 0, 0.8), 0 0 30px rgba(255, 160, 0, 0.4);
+        }
+        .neon-text-chili {
+            text-shadow: 0 0 10px rgba(255, 46, 46, 0.8), 0 0 30px rgba(255, 94, 0, 0.4);
+        }
+
+        /* Glass Neo-Brutalism */
+        .street-panel {
+            background: linear-gradient(135deg, rgba(22, 25, 34, 0.85) 0%, rgba(15, 17, 23, 0.95) 100%);
+            border: 1px solid #232734;
+            backdrop-filter: blur(12px);
+        }
+        .street-panel-hover {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .street-panel-hover:hover {
+            border-color: #FFB800;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -10px rgba(255, 184, 0, 0.25);
+        }
+
+        /* Thermal Printer Receipt for Checkout */
+        .receipt-paper {
+            background: #F9FAFB;
+            color: #111827;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+        .receipt-paper::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: radial-gradient(circle, transparent, transparent 50%, #F9FAFB 50%, #F9FAFB 100%);
+            background-size: 16px 16px;
+        }
+
+        /* Cheese Stretch Range Track */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #FFB800;
+            box-shadow: 0 0 12px #FFB800, inset 0 0 4px #000;
+            cursor: pointer;
+            margin-top: -8px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 8px;
+            border-radius: 999px;
+            background: #232734;
+        }
+
+        /* Nai Miris Overdrive Mode Class */
+        body.overdrive-mode {
+            background-color: #0d0404;
+            background-image: radial-gradient(circle at 50% 30%, rgba(255, 46, 46, 0.15) 0%, transparent 60%);
+        }
+        body.overdrive-mode .neon-text-cheese {
+            color: #FF2E2E !important;
+            text-shadow: 0 0 15px rgba(255, 46, 46, 0.9), 0 0 35px rgba(255, 0, 0, 0.6) !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #07080A; }
+        ::-webkit-scrollbar-thumb { background: #FFB800; border-radius: 10px; }
+    </style>
+</head>
+<body id="page-root" class="antialiased selection:bg-street-cheese selection:text-black">
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast-shelf" class="fixed top-5 right-5 z-[120] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Live Marine Drive Ticker Header -->
+    <div class="bg-gradient-to-r from-street-flame via-street-cheese to-street-chili text-black font-extrabold text-[11px] py-1.5 px-4 overflow-hidden relative shadow-lg z-50">
+        <div class="flex items-center gap-8 whitespace-nowrap animate-marquee font-mono uppercase tracking-wider">
+            <span>🔥 LIVE FROM MARINE DRIVE, COLOMBO: THAWALA CAST-IRON AT 480°C</span>
+            <span>•</span>
+            <span>⚡ TODAY'S KOTTU CHOP VELOCITY: 22 BEATS / SEC</span>
+            <span>•</span>
+            <span>🧀 REAL MOZZARELLA & CHEDDAR DOUBLE DRIP GUARANTEE</span>
+            <span>•</span>
+            <span>🌶️ FRESH NAI MIRIS HARVEST TEMPERED HOURLY</span>
+            <span>•</span>
+            <span>🛵 WHATSAPP NIGHT DISPATCH LIVE TILL 2:00 AM</span>
+            <span>•</span>
+            <span>🔥 LIVE FROM MARINE DRIVE, COLOMBO: THAWALA CAST-IRON AT 480°C</span>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-40 bg-street-black/90 backdrop-blur-xl border-b border-street-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Identity -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-2xl bg-street-cheese text-black flex items-center justify-center font-black text-2xl shadow-lg shadow-street-cheese/30 group-hover:rotate-6 transition-all">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                </div>
+                <div>
+                    <div class="flex items-baseline gap-1.5">
+                        <span class="font-bebas text-3xl sm:text-4xl tracking-wider text-white leading-none">
+                            PRAZA'S <span class="text-street-cheese neon-text-cheese">KOTTU KADE</span>
+                        </span>
+                        <span class="text-[9px] bg-street-chili px-1.5 py-0.5 rounded text-white font-extrabold uppercase tracking-widest hidden sm:inline-block">COLOMBO 03</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono tracking-widest block uppercase">THE SIZZLING DUAL-BLADE REVOLUTION</span>
+                </div>
+            </a>
+
+            <!-- Center Navigation (Creative pill tabs) -->
+            <div class="hidden lg:flex items-center gap-1 bg-street-surface p-1.5 rounded-2xl border border-street-border text-xs font-bold text-slate-300">
+                <a href="#trio-menu" class="px-4 py-2 rounded-xl hover:text-white hover:bg-street-card transition-colors flex items-center gap-2">
+                    <span class="text-street-cheese">01.</span> Signature Trio
+                </a>
+                <a href="#thawa-rig" class="px-4 py-2 rounded-xl hover:text-white hover:bg-street-card transition-colors flex items-center gap-2">
+                    <span class="text-street-chili">02.</span> Thawa Beat Box 🎵
+                </a>
+                <a href="#pull-meter" class="px-4 py-2 rounded-xl hover:text-white hover:bg-street-card transition-colors flex items-center gap-2">
+                    <span class="text-street-cheese">03.</span> Cheese Lab 🧀
+                </a>
+                <a href="#street-creds" class="px-4 py-2 rounded-xl hover:text-white hover:bg-street-card transition-colors flex items-center gap-2">
+                    <span class="text-street-neonGreen">04.</span> Street Creds
+                </a>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex items-center gap-3">
+                <!-- Nai Miris Overdrive Toggle -->
+                <button onclick="toggleNaiMirisOverdrive()" id="overdrive-btn" title="Toggle Nai Miris Heat Mode" class="px-3 py-2 rounded-xl border border-street-border bg-street-surface hover:border-street-chili text-slate-300 hover:text-street-chili text-xs font-bold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-pepper-hot text-street-chili"></i>
+                    <span class="hidden sm:inline" id="overdrive-label">Spicy Mode: OFF</span>
+                </button>
+
+                <!-- Audio Switch -->
+                <button onclick="unlockStreetAudio()" id="sound-engine-btn" class="p-3 rounded-xl border border-street-border bg-street-surface text-street-cheese hover:bg-street-card transition-colors">
+                    <i class="fa-solid fa-volume-high text-sm" id="sound-icon"></i>
+                </button>
+
+                <!-- Slide-Over Cart Trigger -->
+                <button onclick="toggleReceiptCart(true)" class="relative px-4 py-2.5 rounded-xl bg-street-cheese text-black font-extrabold text-xs flex items-center gap-2.5 shadow-lg shadow-street-cheese/20 hover:brightness-110 active:scale-95 transition-all">
+                    <i class="fa-solid fa-fire-burner text-sm"></i>
+                    <span class="hidden sm:inline font-syne">HOT CART</span>
+                    <span id="cart-counter" class="bg-black text-street-cheese text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-mono font-black">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION: Atmospheric Night Marine Drive Street Vibe -->
+    <section class="relative pt-12 pb-20 overflow-hidden">
+        <!-- Floating Ambient Embers Canvas -->
+        <canvas id="hero-ember-canvas" class="absolute inset-0 pointer-events-none z-0 opacity-70"></canvas>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Narrative Area -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Street Stamp -->
+                    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-street-surface border border-street-border text-xs font-bold text-street-cheese">
+                        <span class="w-2 h-2 rounded-full bg-street-neonGreen animate-ping"></span>
+                        <span class="font-mono uppercase tracking-wider">Cast-Iron Night Shift • Open till 2:00 AM</span>
+                    </div>
+
+                    <!-- Hero Title -->
+                    <h1 class="font-bebas text-6xl sm:text-8xl xl:text-9xl leading-[0.88] tracking-wider text-white">
+                        THE <span class="text-street-cheese neon-text-cheese underline decoration-street-chili decoration-4">CHEESIEST</span> <br>
+                        HEARTBEAT OF <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-street-chili via-street-flame to-street-cheese">COLOMBO.</span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-xl font-normal leading-relaxed">
+                        Ape kade 100-page boring menus na machan! Api specialize wenne <strong class="text-white">Supreme Cheese Kottu 3ta witharai</strong>. Fresh flaky Godamba rotti, fiery caramelized Nai Miris gravy, and thick layers of pure melting mozzarella stretch.
+                    </p>
+
+                    <!-- Interactive Quick Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="#trio-menu" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-street-cheese via-yellow-400 to-street-flame text-black font-syne font-black text-sm tracking-wider uppercase flex items-center gap-3 shadow-xl shadow-street-cheese/30 hover:scale-105 active:scale-95 transition-all">
+                            <span>SEE SIGNATURE 3 DISHES</span>
+                            <i class="fa-solid fa-arrow-down-long"></i>
+                        </a>
+
+                        <button onclick="strikeBeat('blade1'); strikeBeat('slam');" class="px-6 py-4 rounded-2xl bg-street-surface border border-street-border hover:border-street-cheese text-slate-200 font-bold text-sm flex items-center gap-3 hover:text-white transition-all group">
+                            <i class="fa-solid fa-drum text-street-chili group-hover:rotate-12 transition-transform"></i>
+                            <span>Hear Street Sizzle FX</span>
+                        </button>
+                    </div>
+
+                    <!-- Mini Live Night Metrics -->
+                    <div class="grid grid-cols-3 gap-3 pt-4 max-w-lg">
+                        <div class="p-3.5 rounded-2xl bg-street-surface border border-street-border text-center">
+                            <span class="font-bebas text-2xl text-street-cheese block">100% REAL</span>
+                            <span class="text-[10px] text-slate-400 font-mono">Mozzarella & Cheddar</span>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-street-surface border border-street-border text-center">
+                            <span class="font-bebas text-2xl text-street-chili block">480°C</span>
+                            <span class="text-[10px] text-slate-400 font-mono">Cast Iron Flat Top</span>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-street-surface border border-street-border text-center">
+                            <span class="font-bebas text-2xl text-street-neonGreen block">3 ONLY</span>
+                            <span class="text-[10px] text-slate-400 font-mono">Dishes Mastered</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual: The Interactive Sizzle Dish Display -->
+                <div class="lg:col-span-5 relative">
+                    <!-- Circular Glowing Ring -->
+                    <div class="w-72 sm:w-96 aspect-square mx-auto rounded-full p-2 bg-gradient-to-tr from-street-chili via-street-cheese to-transparent animate-float-slow relative shadow-2xl shadow-street-cheese/20">
+                        <div class="w-full h-full rounded-full overflow-hidden bg-street-card border-4 border-street-black relative">
+                            <img id="hero-display-img" 
+                                 src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Praza's Supreme Cheese Kottu" 
+                                 class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
+                                 onerror="this.src='https://placehold.co/800x800/161922/FFB800?text=Cheese+Kottu'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-street-black via-transparent to-transparent"></div>
+
+                            <!-- Live Steam Bubble Accents -->
+                            <div class="absolute top-8 left-1/2 -translate-x-1/2 flex gap-2 pointer-events-none opacity-60">
+                                <span class="w-2 h-10 rounded-full bg-white/20 blur-md animate-drip"></span>
+                                <span class="w-3 h-14 rounded-full bg-white/30 blur-md animate-drip" style="animation-delay: 0.3s;"></span>
+                            </div>
+
+                            <!-- Badge Over Image -->
+                            <div class="absolute bottom-5 inset-x-4 text-center">
+                                <span class="px-4 py-2 rounded-xl bg-black/80 backdrop-blur-md border border-street-cheese/40 text-street-cheese font-bebas text-lg tracking-wider">
+                                    ★ FRESH GODAMBA ROTTI SIZZLING HOURLY ★
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Street Badges -->
+                    <div class="absolute -top-4 -left-4 sm:left-2 street-sticker bg-street-cheese text-black font-bebas text-lg px-4 py-2 rounded-xl font-black">
+                        🧀 HEAVY CHEESE PULL!
+                    </div>
+
+                    <div class="absolute -bottom-4 right-0 sm:right-4 street-sticker bg-street-chili text-white font-bebas text-lg px-4 py-2 rounded-xl font-black">
+                        🔥 HOT NAI MIRIS HIT!
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE THAWA BEAT RIG & LIVE SYNTHESIZER -->
+    <section id="thawa-rig" class="py-16 bg-street-surface border-y border-street-border relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-6 mb-10">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-street-cheese/10 border border-street-cheese/30 text-street-cheese text-xs font-mono font-bold uppercase mb-2">
+                        <i class="fa-solid fa-wave-square"></i> Real Web Audio API Synthesis • Zero External Latency
+                    </div>
+                    <h2 class="font-bebas text-4xl sm:text-6xl text-white tracking-wide">
+                        THE CAST-IRON <span class="text-street-cheese neon-text-cheese">THAWALA BEAT RIG</span> 🔪🎵
+                    </h2>
+                    <p class="text-slate-400 text-sm max-w-xl">
+                        Kottu ekak kiyanne food ekak witharak nemei machan, eka live concert ekak! Click the stainless steel blades below or mash your keyboard to chop with authentic acoustic resonance:
+                    </p>
+                </div>
+
+                <!-- Baila Rhythm Auto Looper Button -->
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleBailaLoop()" id="baila-btn" class="px-5 py-3 rounded-xl border-2 border-street-cheese bg-street-card hover:bg-street-cheese hover:text-black text-street-cheese font-syne font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-play" id="baila-icon"></i>
+                        <span id="baila-text">Auto Colombo Beat Loop</span>
+                    </button>
+                    <span class="text-xs font-mono text-slate-400">Tempo: 130 BPM</span>
+                </div>
+            </div>
+
+            <!-- Cast-Iron Plate Soundboard Stage -->
+            <div class="p-6 sm:p-10 rounded-3xl bg-street-card border-2 border-street-border relative shadow-2xl overflow-hidden">
+                <!-- Background Soundwave Visualizer Canvas -->
+                <canvas id="thawa-visualizer-canvas" class="absolute inset-0 w-full h-full opacity-25 pointer-events-none"></canvas>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 relative z-10">
+                    
+                    <!-- Chopper Left Blade -->
+                    <button onclick="strikeBeat('blade1')" class="group p-6 rounded-2xl bg-street-surface border-2 border-slate-700 hover:border-street-cheese active:scale-95 transition-all text-center flex flex-col items-center justify-between min-h-[170px] shadow-lg">
+                        <div class="w-12 h-12 rounded-xl bg-street-card flex items-center justify-center text-slate-300 group-hover:text-street-cheese transition-colors text-2xl group-hover:-rotate-12">
+                            <i class="fa-solid fa-knife-kitchen"></i>
+                        </div>
+                        <div>
+                            <span class="font-bebas text-2xl text-white block tracking-wider">TAKA! (Left Chopper)</span>
+                            <span class="text-[11px] text-slate-400 font-mono">Key: [ A ] • Sharp Metallic Clank</span>
+                        </div>
+                    </button>
+
+                    <!-- Chopper Right Blade -->
+                    <button onclick="strikeBeat('blade2')" class="group p-6 rounded-2xl bg-street-surface border-2 border-slate-700 hover:border-street-cheese active:scale-95 transition-all text-center flex flex-col items-center justify-between min-h-[170px] shadow-lg">
+                        <div class="w-12 h-12 rounded-xl bg-street-card flex items-center justify-center text-slate-300 group-hover:text-street-cheese transition-colors text-2xl group-hover:rotate-12 scale-x-[-1]">
+                            <i class="fa-solid fa-knife-kitchen"></i>
+                        </div>
+                        <div>
+                            <span class="font-bebas text-2xl text-white block tracking-wider">TAKA! (Right Chopper)</span>
+                            <span class="text-[11px] text-slate-400 font-mono">Key: [ D ] • High Pitch Strike</span>
+                        </div>
+                    </button>
+
+                    <!-- Cast-Iron Plate Slam -->
+                    <button onclick="strikeBeat('slam')" class="group p-6 rounded-2xl bg-street-surface border-2 border-street-chili/50 hover:border-street-chili active:scale-95 transition-all text-center flex flex-col items-center justify-between min-h-[170px] shadow-lg">
+                        <div class="w-12 h-12 rounded-xl bg-street-card flex items-center justify-center text-street-chili group-hover:scale-110 transition-transform text-2xl">
+                            <i class="fa-solid fa-hammer"></i>
+                        </div>
+                        <div>
+                            <span class="font-bebas text-2xl text-street-chili block tracking-wider">DHUM! (Thawa Slam)</span>
+                            <span class="text-[11px] text-slate-400 font-mono">Key: [ Space ] • Heavy Iron Thud</span>
+                        </div>
+                    </button>
+
+                    <!-- Sizzling Cheese Melt Burst -->
+                    <button onclick="strikeBeat('sizzle')" class="group p-6 rounded-2xl bg-street-surface border-2 border-street-cheese/50 hover:border-street-cheese active:scale-95 transition-all text-center flex flex-col items-center justify-between min-h-[170px] shadow-lg">
+                        <div class="w-12 h-12 rounded-xl bg-street-card flex items-center justify-center text-street-cheese group-hover:scale-110 transition-transform text-2xl">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div>
+                            <span class="font-bebas text-2xl text-street-cheese block tracking-wider">TSSSSS! (Cheese Sizzle)</span>
+                            <span class="text-[11px] text-slate-400 font-mono">Key: [ S ] • Molten Steam Explosion</span>
+                        </div>
+                    </button>
+
+                </div>
+
+                <!-- Beat Feedback HUD -->
+                <div class="mt-6 pt-4 border-t border-street-border flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-400">
+                    <div class="flex items-center gap-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-street-cheese animate-ping"></span>
+                        <span id="hud-thawa-action">Awaiting your rhythm: Tap pads or mash keyboard [A], [D], [Space], [S]</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span>COMBO CHOP COUNT:</span>
+                        <span id="hud-combo-number" class="text-street-cheese font-black text-base">0</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU: THE SIGNATURE 3 DISHES ONLY -->
+    <section id="trio-menu" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-street-chili/10 border border-street-chili/30 text-street-chili text-xs font-mono font-bold uppercase">
+                    ★ ZERO JUNK • MAXIMUM MASTERY ★
+                </div>
+                <h2 class="font-bebas text-5xl sm:text-7xl text-white tracking-wide">
+                    OUR SIGNATURE <span class="text-street-cheese neon-text-cheese">TRIO</span>
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    Machan, api menu eke dishes 50k dala customer wa confuse karanne na. Api specialize wenne Sri Lankawe supirima me <strong>Cheese Kottu 3ta witharai</strong>. Each plate is chopped to rhythmic order with 100% genuine mozzarella and fiery curry gravies.
+                </p>
+            </div>
+
+            <!-- The 3 Dishes Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- DISH 1: CHEESE CHICKEN KOTTU -->
+                <div class="street-panel street-panel-hover rounded-3xl p-6 flex flex-col justify-between border-street-border relative group">
+                    <div class="absolute -top-3.5 right-6 bg-street-cheese text-black font-bebas text-sm px-3.5 py-1 rounded-full font-black tracking-wider shadow-md">
+                        #1 UNDISPUTED CHAMPION 👑
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Food Photo -->
+                        <div class="w-full h-56 rounded-2xl overflow-hidden relative border border-street-border">
+                            <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Praza's Cheese Chicken Kottu" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/600x400/161922/FFB800?text=Cheese+Chicken+Kottu'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-street-black via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 left-3 px-3 py-1 rounded-lg bg-black/80 backdrop-blur-md text-street-cheese font-mono text-xs font-bold">
+                                🍗 Smoked Roasted Chicken Chunks
+                            </span>
+                        </div>
+
+                        <!-- Info -->
+                        <div>
+                            <h3 class="font-bebas text-3xl sm:text-4xl text-white tracking-wide group-hover:text-street-cheese transition-colors">
+                                Cheese Chicken Kottu
+                            </h3>
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mt-1">
+                                Flaky hot Godamba rotti, shredded tender roast chicken, farm-fresh eggs scrambled with leeks and onions, drowned in slow-cooked Nai Miris gravy and melted double cheese avalanche.
+                            </p>
+
+                            <!-- Flavor Profile Badges -->
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-slate-300 border border-street-border">🔥 Nai Miris Kick</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-street-cheese border border-street-border">🧀 Double Mozzarella</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-slate-300 border border-street-border">🍳 Double Scrambled Egg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price & Customize Action -->
+                    <div class="pt-6 mt-6 border-t border-street-border flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] text-slate-400 font-mono block">Standard Night Portion</span>
+                            <span class="font-bebas text-3xl text-street-cheese">Rs. 1,650</span>
+                        </div>
+                        <button onclick="openCustomizeModal('chicken')" class="px-5 py-3 rounded-xl bg-street-cheese hover:bg-yellow-400 text-black font-syne font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-street-cheese/20 active:scale-95 transition-all">
+                            <span>Customize & Add</span>
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- DISH 2: CHEESE FISH KOTTU -->
+                <div class="street-panel street-panel-hover rounded-3xl p-6 flex flex-col justify-between border-street-border relative group">
+                    <div class="absolute -top-3.5 right-6 bg-blue-500 text-black font-bebas text-sm px-3.5 py-1 rounded-full font-black tracking-wider shadow-md">
+                        OCEAN SIZZLE 🌊
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Food Photo -->
+                        <div class="w-full h-56 rounded-2xl overflow-hidden relative border border-street-border">
+                            <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Praza's Cheese Fish Kottu" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/600x400/161922/FFB800?text=Cheese+Fish+Kottu'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-street-black via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 left-3 px-3 py-1 rounded-lg bg-black/80 backdrop-blur-md text-blue-400 font-mono text-xs font-bold">
+                                🐟 Seer Fish Pepper Flakes
+                            </span>
+                        </div>
+
+                        <!-- Info -->
+                        <div>
+                            <h3 class="font-bebas text-3xl sm:text-4xl text-white tracking-wide group-hover:text-street-cheese transition-colors">
+                                Cheese Fish Kottu
+                            </h3>
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mt-1">
+                                Deep-fried marine fish chunks seasoned with cracked black pepper, fresh curry leaves, crushed mustard, tempered green chilies, finished under an ocean of sizzling melted gouda & cheddar.
+                            </p>
+
+                            <!-- Flavor Profile Badges -->
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-slate-300 border border-street-border">🌊 Crispy Ocean Seer</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-street-cheese border border-street-border">🧀 Cheese Melt</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-slate-300 border border-street-border">🍃 Tempered Curry Leaves</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price & Customize Action -->
+                    <div class="pt-6 mt-6 border-t border-street-border flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] text-slate-400 font-mono block">Standard Night Portion</span>
+                            <span class="font-bebas text-3xl text-street-cheese">Rs. 1,750</span>
+                        </div>
+                        <button onclick="openCustomizeModal('fish')" class="px-5 py-3 rounded-xl bg-street-cheese hover:bg-yellow-400 text-black font-syne font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-street-cheese/20 active:scale-95 transition-all">
+                            <span>Customize & Add</span>
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- DISH 3: CHEESE VEGETABLE KOTTU -->
+                <div class="street-panel street-panel-hover rounded-3xl p-6 flex flex-col justify-between border-street-border relative group">
+                    <div class="absolute -top-3.5 right-6 bg-street-neonGreen text-black font-bebas text-sm px-3.5 py-1 rounded-full font-black tracking-wider shadow-md">
+                        100% PURE GREEN 🥗
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Food Photo -->
+                        <div class="w-full h-56 rounded-2xl overflow-hidden relative border border-street-border">
+                            <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Praza's Cheese Veggie Kottu" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/600x400/161922/FFB800?text=Cheese+Veg+Kottu'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-street-black via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 left-3 px-3 py-1 rounded-lg bg-black/80 backdrop-blur-md text-street-neonGreen font-mono text-xs font-bold">
+                                🌽 Sweet Corn & Paneer Cubes
+                            </span>
+                        </div>
+
+                        <!-- Info -->
+                        <div>
+                            <h3 class="font-bebas text-3xl sm:text-4xl text-white tracking-wide group-hover:text-street-cheese transition-colors">
+                                Cheese Vegetable Kottu
+                            </h3>
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mt-1">
+                                Crisp shredded cabbage, garden carrots, bell peppers, sweet corn kernels & tender paneer cubes tossed in rich tempered coconut gravy, sealed with molten cheese blanket.
+                            </p>
+
+                            <!-- Flavor Profile Badges -->
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-slate-300 border border-street-border">🌱 100% Pure Veg</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-street-cheese border border-street-border">🧀 Double Mozzarella</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-street-surface text-[11px] font-mono text-slate-300 border border-street-border">🌽 Juicy Sweet Corn</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price & Customize Action -->
+                    <div class="pt-6 mt-6 border-t border-street-border flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] text-slate-400 font-mono block">Standard Night Portion</span>
+                            <span class="font-bebas text-3xl text-street-cheese">Rs. 1,350</span>
+                        </div>
+                        <button onclick="openCustomizeModal('veg')" class="px-5 py-3 rounded-xl bg-street-cheese hover:bg-yellow-400 text-black font-syne font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-street-cheese/20 active:scale-95 transition-all">
+                            <span>Customize & Add</span>
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE CHEESE PULL & SPICE LAB -->
+    <section id="pull-meter" class="py-20 bg-street-surface border-y border-street-border relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-street-cheese/10 border border-street-cheese/30 text-street-cheese text-xs font-mono font-bold uppercase">
+                        🧀 The Science of the Stretch
+                    </div>
+                    <h2 class="font-bebas text-5xl sm:text-7xl text-white tracking-wide">
+                        TEST THE <span class="text-street-cheese neon-text-cheese">CHEESE PULL</span> DYNAMICS
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Commercial cheese sauces use chemical powders. At <strong>PRAZA'S KOTTU KADE</strong>, we blend genuine Mozzarella with aged cheddar directly onto the sizzling hot rotti. Drag this stretch meter to see how far our string goes:
+                    </p>
+
+                    <!-- Interactive Slider Control -->
+                    <div class="p-6 rounded-2xl bg-street-card border border-street-border space-y-4">
+                        <div class="flex items-center justify-between font-mono text-xs">
+                            <span class="text-slate-400">PULL INTENSITY:</span>
+                            <span id="pull-meter-value" class="text-street-cheese font-black text-base">55% (Street Standard)</span>
+                        </div>
+                        
+                        <input type="range" id="cheese-slider" min="10" max="100" value="55" 
+                               oninput="updateCheesePullVisualizer(this.value)"
+                               class="w-full cursor-pointer accent-street-cheese">
+
+                        <div class="flex justify-between text-[11px] font-mono text-slate-500">
+                            <span>Gentle Melt</span>
+                            <span>Standard Stretch</span>
+                            <span>Extreme Avalanche 🧀</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Stretch Display Box -->
+                <div class="lg:col-span-6 flex flex-col items-center justify-center p-8 rounded-3xl bg-street-card border-2 border-street-border relative min-h-[340px]">
+                    <div class="text-center space-y-4 w-full">
+                        <div class="font-bebas text-2xl text-slate-300">MOZZARELLA STRETCH SIMULATOR</div>
+                        
+                        <!-- Visual animated cheese strand -->
+                        <div class="relative w-full max-w-sm mx-auto h-40 flex items-center justify-center">
+                            <!-- Upper rotti fork -->
+                            <div id="cheese-fork" class="absolute transition-all duration-200" style="top: 15px;">
+                                <i class="fa-solid fa-utensils text-2xl text-street-cheese"></i>
+                            </div>
+
+                            <!-- Dynamic Elastic Cheese Web SVG -->
+                            <svg class="w-full h-full" viewBox="0 0 200 120" preserveAspectRatio="none">
+                                <path id="cheese-path" d="M 60,30 Q 100,60 140,30 Q 100,70 60,30" 
+                                      fill="#FFB800" opacity="0.9" filter="drop-shadow(0 0 8px rgba(255,184,0,0.6))" />
+                            </svg>
+
+                            <!-- Base plate -->
+                            <div class="absolute bottom-2 inset-x-0 mx-auto w-48 h-8 rounded-full bg-street-black border border-street-border flex items-center justify-center text-[10px] font-mono text-street-cheese">
+                                🍳 Cast-Iron Flat Thawala Base
+                            </div>
+                        </div>
+
+                        <p id="cheese-meter-caption" class="text-xs font-mono text-street-cheese font-bold">
+                            "Optimal elasticity achieved. Gooey, creamy & blistered."
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY & STREET CREDENTIALS -->
+    <section id="street-creds" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+                <span class="text-xs font-mono font-bold text-street-cheese uppercase tracking-widest">★ Verified Colombo Night Foodies ★</span>
+                <h2 class="font-bebas text-4xl sm:text-6xl text-white tracking-wide">WHAT THEY SAY AT 1:30 AM 🔥</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Review 1 -->
+                <div class="street-panel p-6 rounded-3xl border-street-border flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex text-street-cheese text-sm gap-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-300 text-sm italic leading-relaxed">
+                            "Machan, Colombo wala godak kade cheese kiyala mayonnaise danawa. But Praza's eke Cheese Chicken Kottu eka nam pure mozzarella stretch ekak! Nai Miris punch eka supiri."
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-street-border flex items-center justify-between">
+                        <div>
+                            <span class="font-syne font-bold text-xs text-white block">Kasun Perera</span>
+                            <span class="text-[10px] font-mono text-slate-500">Kollupitiya • Late Night Drive</span>
+                        </div>
+                        <span class="text-xs font-mono text-street-cheese bg-street-surface px-2.5 py-1 rounded-lg">Verified Foodie</span>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="street-panel p-6 rounded-3xl border-street-border flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex text-street-cheese text-sm gap-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-300 text-sm italic leading-relaxed">
+                            "Fish kottu walata mama echchara kamathi na ordinarily. Habai me Seer fish pepper flakes and hot melted cheese mix eka out of this world. Thawa eke beat ekath patta!"
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-street-border flex items-center justify-between">
+                        <div>
+                            <span class="font-syne font-bold text-xs text-white block">Dr. Shenali Fernando</span>
+                            <span class="text-[10px] font-mono text-slate-500">Bambalapitiya • Direct Pickup</span>
+                        </div>
+                        <span class="text-xs font-mono text-street-cheese bg-street-surface px-2.5 py-1 rounded-lg">Regular Visitor</span>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="street-panel p-6 rounded-3xl border-street-border flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex text-street-cheese text-sm gap-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-300 text-sm italic leading-relaxed">
+                            "Cheese Veggie Kottu eka paneer cubes and sweet corn ekka piping hot deliver una. Packaging eka hot foil seal nisa cheese eka thawama molten widiyatama thibba."
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-street-border flex items-center justify-between">
+                        <div>
+                            <span class="font-syne font-bold text-xs text-white block">Dulantha Silva</span>
+                            <span class="text-[10px] font-mono text-slate-500">Marine Drive • Midnight Order</span>
+                        </div>
+                        <span class="text-xs font-mono text-street-cheese bg-street-surface px-2.5 py-1 rounded-lg">UberEats Fan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CUSTOMIZATION BOTTOM-SHEET MODAL -->
+    <div id="dish-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all">
+        <div class="street-panel max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-street-cheese/40 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            
+            <!-- Close -->
+            <button onclick="closeCustomizeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-street-card hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="mb-6">
+                <span class="text-[11px] font-mono text-street-cheese uppercase tracking-wider block">Custom Dish Blueprint</span>
+                <h3 id="modal-dish-name" class="font-bebas text-3xl sm:text-4xl text-white tracking-wide">Cheese Kottu</h3>
+                <p id="modal-dish-summary" class="text-xs text-slate-400 mt-1">Adjust spice burn & cheese avalanche before dispatch.</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Heat Kick Selector -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-300 uppercase tracking-wider mb-2">1. Spice Kick Level 🔥</label>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="spice-level" value="Mild Creamy" class="peer sr-only">
+                            <div class="p-3 rounded-xl border border-street-border bg-street-card peer-checked:border-street-cheese peer-checked:bg-street-cheese/10 text-center transition-all">
+                                <span class="font-bebas text-base text-white block">Mild</span>
+                                <span class="text-[10px] font-mono text-slate-400">Sweet & Cheesy</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="spice-level" value="Colombo Hot" checked class="peer sr-only">
+                            <div class="p-3 rounded-xl border border-street-border bg-street-card peer-checked:border-street-cheese peer-checked:bg-street-cheese/20 text-center transition-all">
+                                <span class="font-bebas text-base text-street-cheese block">Colombo Hot</span>
+                                <span class="text-[10px] font-mono text-street-cheese">Authentic Thawa</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="spice-level" value="Nai Miris Fire" class="peer sr-only">
+                            <div class="p-3 rounded-xl border border-street-border bg-street-card peer-checked:border-street-chili peer-checked:bg-street-chili/20 text-center transition-all">
+                                <span class="font-bebas text-base text-street-chili block">Nai Miris</span>
+                                <span class="text-[10px] font-mono text-street-chili">Extreme Burn 🌶️</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Upgrades -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-300 uppercase tracking-wider mb-2">2. Cheese & Gravy Boosts 🧀</label>
+                    <div class="space-y-2.5">
+                        <label class="flex items-center justify-between p-3.5 rounded-xl border border-street-border bg-street-card cursor-pointer hover:border-slate-600 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" id="modal-extra-cheese" class="w-4 h-4 rounded accent-street-cheese bg-street-surface border-slate-700">
+                                <span class="text-xs font-semibold text-slate-200">Extra Sizzling Mozzarella Pull (+100g)</span>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-street-cheese">+ Rs. 350</span>
+                        </label>
+                        <label class="flex items-center justify-between p-3.5 rounded-xl border border-street-border bg-street-card cursor-pointer hover:border-slate-600 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" id="modal-extra-gravy" class="w-4 h-4 rounded accent-street-cheese bg-street-surface border-slate-700">
+                                <span class="text-xs font-semibold text-slate-200">Separate Thick Curry Gravy Cup</span>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-street-cheese">+ Rs. 100</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Machan's Special Requests -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-300 uppercase tracking-wider mb-2">3. Machan's Note for the Cook ✍️</label>
+                    <input type="text" id="modal-notes-input" placeholder="E.g., Less onions, crispy roast chicken, extra green chili..."
+                           class="w-full px-4 py-3 rounded-xl bg-street-surface border border-street-border text-sm text-slate-200 focus:outline-none focus:border-street-cheese placeholder-slate-600 font-sans">
+                </div>
+
+                <!-- Quantity & Add to Cart -->
+                <div class="pt-4 border-t border-street-border flex items-center justify-between gap-4">
+                    <div class="flex items-center border border-street-border rounded-xl bg-street-surface p-1">
+                        <button onclick="changeModalQuantity(-1)" class="w-8 h-8 rounded-lg hover:bg-street-card text-slate-300 font-bold flex items-center justify-center">-</button>
+                        <span id="modal-qty-text" class="w-8 text-center font-mono font-bold text-sm text-white">1</span>
+                        <button onclick="changeModalQuantity(1)" class="w-8 h-8 rounded-lg hover:bg-street-card text-slate-300 font-bold flex items-center justify-center">+</button>
+                    </div>
+
+                    <button onclick="submitModalToCart()" class="flex-1 py-3.5 px-6 rounded-xl bg-street-cheese hover:bg-yellow-400 text-black font-syne font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        <span>ADD TO ORDER • <span id="modal-total-display">Rs. 1,650</span></span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- THERMAL RECEIPT SLIDE-OVER CART -->
+    <div id="cart-backdrop" onclick="toggleReceiptCart(false)" class="fixed inset-0 z-[110] bg-black/80 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0"></div>
+
+    <aside id="receipt-cart-sidebar" class="fixed top-0 right-0 bottom-0 w-full sm:w-[480px] z-[115] bg-street-black border-l border-street-border flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">
+        
+        <!-- Cart Drawer Header -->
+        <div class="p-6 border-b border-street-border flex items-center justify-between bg-street-surface">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-street-cheese text-black flex items-center justify-center font-black">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <div>
+                    <h3 class="font-bebas text-2xl text-white tracking-wider leading-none">PRAZA'S DISPATCH RECEIPT</h3>
+                    <span class="text-[10px] font-mono text-slate-400">Night Thawa Order Slip</span>
+                </div>
+            </div>
+            <button onclick="toggleReceiptCart(false)" class="w-9 h-9 rounded-full bg-street-card hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Scrollable Items Container (Receipt Aesthetic) -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div id="receipt-items-list" class="space-y-3 font-mono">
+                <!-- Dynamically rendered -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="receipt-empty" class="text-center py-20 space-y-4">
+                <div class="w-16 h-16 rounded-full bg-street-surface mx-auto flex items-center justify-center text-slate-500 text-2xl border border-street-border">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h4 class="font-bebas text-2xl text-slate-300">YOUR TICKET IS EMPTY, MACHAN!</h4>
+                <p class="text-xs text-slate-500 max-w-xs mx-auto font-sans">Select from Cheese Chicken, Fish, or Veggie kottu to ignite the night order.</p>
+            </div>
+        </div>
+
+        <!-- Checkout Action Footer -->
+        <div id="cart-footer-controls" class="p-6 border-t border-street-border bg-street-surface space-y-4">
+            <!-- Customer Inputs -->
+            <div class="space-y-2 font-mono text-xs">
+                <input type="text" id="client-name" placeholder="YOUR NAME (E.g. Shan / Nimal)"
+                       class="w-full px-3.5 py-2.5 rounded-xl bg-street-black border border-street-border text-slate-200 focus:outline-none focus:border-street-cheese placeholder-slate-600">
+                <input type="text" id="client-address" placeholder="DELIVERY ADDRESS / COLOMBO LOCATION"
+                       class="w-full px-3.5 py-2.5 rounded-xl bg-street-black border border-street-border text-slate-200 focus:outline-none focus:border-street-cheese placeholder-slate-600">
+            </div>
+
+            <!-- Calculation Breakdown -->
+            <div class="space-y-1.5 text-xs font-mono text-slate-400 pt-2 border-t border-street-border">
+                <div class="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span id="receipt-subtotal" class="text-white font-bold">Rs. 0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Hot Foil Insulated Box:</span>
+                    <span class="text-street-neonGreen font-bold">FREE (Street Compliment)</span>
+                </div>
+                <div class="flex justify-between text-base font-black text-street-cheese pt-2 border-t border-street-border">
+                    <span class="font-bebas text-xl">NET TOTAL:</span>
+                    <span id="receipt-grandtotal" class="font-bebas text-2xl text-street-cheese">Rs. 0</span>
+                </div>
+            </div>
+
+            <!-- WhatsApp Dispatch -->
+            <button onclick="dispatchToWhatsApp()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:brightness-110 active:scale-95 text-black font-syne font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-500/20 transition-all">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>SEND DIRECT ORDER VIA WHATSAPP</span>
+            </button>
+            <p class="text-[10px] text-center text-slate-500 font-mono">Instant transmission to Praza's Marine Drive Hotline</p>
+        </div>
+    </aside>
+
+    <!-- FOOTER -->
+    <footer class="bg-street-black border-t border-street-border pt-16 pb-12 relative text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-street-border">
+                
+                <!-- Col 1 -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-street-cheese text-black flex items-center justify-center font-black text-lg">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <span class="font-bebas text-3xl text-white">PRAZA'S <span class="text-street-cheese">KOTTU KADE</span></span>
+                    </div>
+                    <p class="text-xs leading-relaxed">
+                        Colombo’s loudest, cheesiest, late-night street food sanctuary. No fluff, no 50-dish distractions. Just three masterpieces perfected on cast iron.
+                    </p>
+                </div>
+
+                <!-- Col 2: The Trio Menu -->
+                <div class="space-y-2">
+                    <h4 class="font-bebas text-xl text-white tracking-wider">THE EXCLUSIVE 3</h4>
+                    <ul class="text-xs space-y-2 font-mono">
+                        <li><a href="#trio-menu" class="hover:text-street-cheese">🧀 Cheese Chicken Kottu (Rs. 1,650)</a></li>
+                        <li><a href="#trio-menu" class="hover:text-street-cheese">🐟 Cheese Fish Kottu (Rs. 1,750)</a></li>
+                        <li><a href="#trio-menu" class="hover:text-street-cheese">🌱 Cheese Veggie Kottu (Rs. 1,350)</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Hours & Street Location -->
+                <div class="space-y-2">
+                    <h4 class="font-bebas text-xl text-white tracking-wider">LIVE STREET LOCATION</h4>
+                    <p class="text-xs leading-relaxed">
+                        42/B, Marine Drive, Kollupitiya, Colombo 03, Sri Lanka.<br>
+                        <span class="text-street-cheese font-mono font-bold">Open Daily: 5:00 PM – 2:00 AM (Midnight)</span>
+                    </p>
+                </div>
+
+                <!-- Col 4: Hotlines -->
+                <div class="space-y-2">
+                    <h4 class="font-bebas text-xl text-white tracking-wider">HOTLINE & DISPATCH</h4>
+                    <a href="tel:+94771234567" class="font-bebas text-2xl text-street-cheese block hover:underline">
+                        +94 77 123 4567
+                    </a>
+                    <span class="text-[11px] font-mono text-emerald-400 block">● Kitchen Currently Sizzling</span>
+                </div>
+
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-slate-500 gap-4">
+                <p>© 2026 PRAZA'S KOTTU KADE (PVT) LTD. ALL RIGHTS RESERVED.</p>
+                <p>Crafted with 🌶️ Nai Miris & Pure Double Mozzarella in Colombo.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky WhatsApp Button -->
+    <div class="fixed bottom-6 left-6 z-30">
+        <a href="https://wa.me/94771234567?text=Machan%2C%20mama%20Praza%27s%20Kottu%20Kade%20eka%20order%20karanna%20hithuwa!" target="_blank"
+           class="flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-syne font-black text-xs shadow-2xl shadow-emerald-500/40 hover:scale-105 active:scale-95 transition-all">
+            <i class="fa-brands fa-whatsapp text-lg"></i>
+            <span class="hidden sm:inline">Direct WhatsApp Hotline</span>
+        </a>
+    </div>
+
+    <script>
+        // WEB AUDIO API REAL STREET ACOUSTIC SYNTHESIZER
+        let audioCtx = null;
+        let isAudioUnlocked = false;
+        let comboChopCounter = 0;
+        let bailaLoopInterval = null;
+        let isBailaRunning = false;
+
+        function unlockStreetAudio() {
+            if (!audioCtx) {
+                const AudioClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioClass) audioCtx = new AudioClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isAudioUnlocked = true;
+            const icon = document.getElementById('sound-icon');
+            if (icon) icon.className = "fa-solid fa-volume-high text-street-neonGreen";
+            showStreetToast("Audio Engine Active! Mash keys [A], [D], [Space], [S]", "success");
+        }
+
+        function triggerScreenShake() {
+            const root = document.getElementById('page-root');
+            root.classList.remove('screen-shake');
+            void root.offsetWidth; // Trigger reflow
+            root.classList.add('screen-shake');
+            setTimeout(() => root.classList.remove('screen-shake'), 180);
+        }
+
+        // Live Synthesizer for Authentic Kottu Blades & Iron Thawa
+        function strikeBeat(type) {
+            unlockStreetAudio();
+            if (!audioCtx) return;
+
+            const t = audioCtx.currentTime;
+            comboChopCounter++;
+            const comboEl = document.getElementById('hud-combo-number');
+            if (comboEl) {
+                comboEl.innerText = comboChopCounter;
+                comboEl.classList.add('text-street-chili', 'scale-125');
+                setTimeout(() => comboEl.classList.remove('text-street-chili', 'scale-125'), 120);
+            }
+
+            const hudAction = document.getElementById('hud-thawa-action');
+
+            if (type === 'blade1' || type === 'blade2') {
+                // High-resonant stainless steel blade clatter
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const bpf = audioCtx.createBiquadFilter();
+
+                const freq = type === 'blade1' ? 920 : 1050;
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, t);
+                osc.frequency.exponentialRampToValueAtTime(260, t + 0.1);
+
+                bpf.type = 'bandpass';
+                bpf.frequency.setValueAtTime(1600, t);
+                bpf.Q.setValueAtTime(4, t);
+
+                gain.gain.setValueAtTime(0.5, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+
+                osc.connect(bpf);
+                bpf.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(t);
+                osc.stop(t + 0.1);
+
+                if (hudAction) hudAction.innerText = type === 'blade1' ? "TAKA! Left Blade Strike on Iron 🔪" : "TAKA! Right Blade Chopper Churn 🔪";
+
+            } else if (type === 'slam') {
+                // Heavy cast-iron thud (Base Thawala Slam)
+                triggerScreenShake();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(140, t);
+                osc.frequency.exponentialRampToValueAtTime(35, t + 0.28);
+
+                gain.gain.setValueAtTime(0.85, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(t);
+                osc.stop(t + 0.28);
+
+                if (hudAction) hudAction.innerText = "DHUM! 480°C Heavy Cast-Iron Thawa Slam! 💥";
+
+                // Visual Spark Confetti Burst
+                confetti({
+                    particleCount: 25,
+                    spread: 45,
+                    origin: { y: 0.7 },
+                    colors: ['#FFB800', '#FF2E2E', '#FFA000']
+                });
+
+            } else if (type === 'sizzle') {
+                // White noise sizzle burst (cheese bubbling)
+                const bufferSize = audioCtx.sampleRate * 0.4;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'highpass';
+                filter.frequency.setValueAtTime(2600, t);
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.3, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                noise.start(t);
+
+                if (hudAction) hudAction.innerText = "TSSSSS! Double Cheese Melting on Sizzling Rotti 🧀🔥";
+            }
+        }
+
+        // Automatic Colombo Street Baila Rhythm Beat Looper
+        function toggleBailaLoop() {
+            unlockStreetAudio();
+            const btn = document.getElementById('baila-btn');
+            const icon = document.getElementById('baila-icon');
+            const txt = document.getElementById('baila-text');
+
+            if (isBailaRunning) {
+                clearInterval(bailaLoopInterval);
+                isBailaRunning = false;
+                icon.className = "fa-solid fa-play";
+                txt.innerText = "Auto Colombo Beat Loop";
+                btn.classList.remove('bg-street-cheese', 'text-black');
+            } else {
+                isBailaRunning = true;
+                icon.className = "fa-solid fa-stop";
+                txt.innerText = "Stop Sizzle Beat";
+                btn.classList.add('bg-street-cheese', 'text-black');
+
+                // Colombo "3-2-3" street beat sequence
+                const sequence = ['blade1', 'blade2', 'blade1', 'slam', 'blade1', 'blade2', 'sizzle'];
+                let step = 0;
+                bailaLoopInterval = setInterval(() => {
+                    strikeBeat(sequence[step % sequence.length]);
+                    step++;
+                }, 210); // ~140 BPM
+            }
+        }
+
+        // Keyboard hotkeys
+        window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            const k = e.key.toLowerCase();
+            if (k === 'a') { e.preventDefault(); strikeBeat('blade1'); }
+            if (k === 'd') { e.preventDefault(); strikeBeat('blade2'); }
+            if (k === ' ' || k === 'space') { e.preventDefault(); strikeBeat('slam'); }
+            if (k === 's') { e.preventDefault(); strikeBeat('sizzle'); }
+        });
+    </script>
+
+    <script>
+        // Floating Ember Canvas Engine
+        function initEmbers() {
+            const canvas = document.getElementById('hero-ember-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let w, h;
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = canvas.parentElement.offsetHeight || 600;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    size: Math.random() * 2.5 + 0.8,
+                    speedY: Math.random() * 1.5 + 0.4,
+                    speedX: (Math.random() - 0.5) * 0.7,
+                    opacity: Math.random() * 0.8 + 0.2,
+                    color: Math.random() > 0.4 ? '#FFB800' : '#FF2E2E'
+                });
+            }
+
+            function loop() {
+                ctx.clearRect(0, 0, w, h);
+                particles.forEach(p => {
+                    p.y -= p.speedY;
+                    p.x += p.speedX;
+
+                    if (p.y < 0) {
+                        p.y = h + 10;
+                        p.x = Math.random() * w;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = p.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1;
+                });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // Interactive Cheese Pull Visualizer Slider
+        function updateCheesePullVisualizer(val) {
+            const label = document.getElementById('pull-meter-value');
+            const path = document.getElementById('cheese-path');
+            const fork = document.getElementById('cheese-fork');
+            const caption = document.getElementById('cheese-meter-caption');
+
+            const percent = parseInt(val);
+            label.innerText = `${percent}% (${percent > 75 ? 'Avalanche Overflow 🧀' : percent > 45 ? 'Street Standard' : 'Mild Melt'})`;
+
+            // Adjust fork height
+            const forkOffset = 45 - (percent * 0.35);
+            if (fork) fork.style.top = `${forkOffset}px`;
+
+            // Adjust SVG elasticity curve
+            const stretchDepth = 20 + (percent * 0.7);
+            if (path) {
+                path.setAttribute('d', `M 60,30 Q 100,${stretchDepth} 140,30 Q 100,${stretchDepth + 15} 60,30`);
+            }
+
+            if (percent > 80) {
+                caption.innerText = "🔥 EXTREME AVALANCHE: Real Mozzarella stretching all the way to Marine Drive!";
+            } else if (percent > 40) {
+                caption.innerText = "Optimal elasticity achieved. Gooey, creamy & blistered.";
+            } else {
+                caption.innerText = "Gentle creamy melt coating the godamba shreds.";
+            }
+        }
+
+        // Toggle Nai Miris Overdrive Mode
+        let isOverdrive = false;
+        function toggleNaiMirisOverdrive() {
+            isOverdrive = !isOverdrive;
+            const body = document.body;
+            const btn = document.getElementById('overdrive-btn');
+            const label = document.getElementById('overdrive-label');
+
+            if (isOverdrive) {
+                body.classList.add('overdrive-mode');
+                label.innerText = "Spicy Mode: ON 🔥";
+                btn.classList.add('border-street-chili', 'bg-street-chili/20', 'text-street-chili');
+                showStreetToast("NAI MIRIS OVERDRIVE ENGAGED! Hot peppers ignited.", "warning");
+                strikeBeat('sizzle');
+            } else {
+                body.classList.remove('overdrive-mode');
+                label.innerText = "Spicy Mode: OFF";
+                btn.classList.remove('border-street-chili', 'bg-street-chili/20', 'text-street-chili');
+                showStreetToast("Back to standard street temp.", "info");
+            }
+        }
+    </script>
+
+    <script>
+        // DISHES SPECIFICATIONS (THE SIGNATURE 3 DISHES)
+        const TRIO_MENU = {
+            chicken: {
+                id: 'chicken',
+                name: 'Cheese Chicken Kottu',
+                price: 1650,
+                desc: 'Slow roasted chicken chunks, godamba rotti, double egg, hot curry gravy & mozzarella.'
+            },
+            fish: {
+                id: 'fish',
+                name: 'Cheese Fish Kottu',
+                price: 1750,
+                desc: 'Crispy Seer/Sailfish pepper flakes, caramelized onions, curry leaf tempering & cheese.'
+            },
+            veg: {
+                id: 'veg',
+                name: 'Cheese Vegetable Kottu',
+                price: 1350,
+                desc: 'Sweet corn, paneer cubes, crisp garden cabbage, shredded carrots & heavy melted cheddar.'
+            }
+        };
+
+        let currentModalDishKey = 'chicken';
+        let modalQty = 1;
+        let cartItems = [];
+
+        // Open Customizer
+        function openCustomizeModal(key) {
+            const dish = TRIO_MENU[key];
+            if (!dish) return;
+
+            currentModalDishKey = key;
+            modalQty = 1;
+
+            document.getElementById('modal-dish-name').innerText = dish.name;
+            document.getElementById('modal-dish-summary').innerText = dish.desc;
+            document.getElementById('modal-qty-text').innerText = modalQty;
+            document.getElementById('modal-notes-input').value = '';
+            document.getElementById('modal-extra-cheese').checked = false;
+            document.getElementById('modal-extra-gravy').checked = false;
+
+            // Default spice
+            const radios = document.getElementsByName('spice-level');
+            radios.forEach(r => { if (r.value === 'Colombo Hot') r.checked = true; });
+
+            updateModalPriceCalculation();
+
+            const modal = document.getElementById('dish-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomizeModal() {
+            document.getElementById('dish-modal').classList.add('hidden');
+        }
+
+        function changeModalQuantity(delta) {
+            modalQty = Math.max(1, modalQty + delta);
+            document.getElementById('modal-qty-text').innerText = modalQty;
+            updateModalPriceCalculation();
+        }
+
+        function updateModalPriceCalculation() {
+            const dish = TRIO_MENU[currentModalDishKey];
+            if (!dish) return;
+
+            let unit = dish.price;
+            if (document.getElementById('modal-extra-cheese').checked) unit += 350;
+            if (document.getElementById('modal-extra-gravy').checked) unit += 100;
+
+            const total = unit * modalQty;
+            document.getElementById('modal-total-display').innerText = `Rs. ${total.toLocaleString()}`;
+        }
+
+        document.getElementById('modal-extra-cheese').addEventListener('change', updateModalPriceCalculation);
+        document.getElementById('modal-extra-gravy').addEventListener('change', updateModalPriceCalculation);
+
+        function submitModalToCart() {
+            const dish = TRIO_MENU[currentModalDishKey];
+            if (!dish) return;
+
+            let unit = dish.price;
+            const extraCheese = document.getElementById('modal-extra-cheese').checked;
+            const extraGravy = document.getElementById('modal-extra-gravy').checked;
+            const spice = document.querySelector('input[name="spice-level"]:checked').value;
+            const note = document.getElementById('modal-notes-input').value.trim();
+
+            if (extraCheese) unit += 350;
+            if (extraGravy) unit += 100;
+
+            cartItems.push({
+                cartId: 'KOTTU_' + Date.now(),
+                name: dish.name,
+                unitPrice: unit,
+                quantity: modalQty,
+                spice: spice,
+                extraCheese: extraCheese,
+                extraGravy: extraGravy,
+                note: note
+            });
+
+            closeCustomizeModal();
+            renderReceiptCart();
+            toggleReceiptCart(true);
+
+            // Confetti
+            confetti({
+                particleCount: 40,
+                spread: 50,
+                origin: { y: 0.8 },
+                colors: ['#FFB800', '#FF2E2E']
+            });
+
+            showStreetToast(`Added ${dish.name} (${modalQty}x) to order ticket!`, 'success');
+        }
+
+        function removeCartItem(cartId) {
+            cartItems = cartItems.filter(i => i.cartId !== cartId);
+            renderReceiptCart();
+            showStreetToast("Item removed from receipt.", "info");
+        }
+
+        function renderReceiptCart() {
+            const list = document.getElementById('receipt-items-list');
+            const emptyState = document.getElementById('receipt-empty');
+            const subtotalEl = document.getElementById('receipt-subtotal');
+            const grandTotalEl = document.getElementById('receipt-grandtotal');
+            const counter = document.getElementById('cart-counter');
+
+            const totalCount = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
+            counter.innerText = totalCount;
+
+            if (cartItems.length === 0) {
+                list.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                subtotalEl.innerText = 'Rs. 0';
+                grandTotalEl.innerText = 'Rs. 0';
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            let grand = 0;
+            let html = '';
+
+            cartItems.forEach((item, idx) => {
+                const sub = item.unitPrice * item.quantity;
+                grand += sub;
+
+                let upgrades = [];
+                if (item.extraCheese) upgrades.push("Extra Mozzarella (+Rs.350)");
+                if (item.extraGravy) upgrades.push("Extra Gravy (+Rs.100)");
+
+                html += `
+                    <div class="p-3.5 rounded-2xl bg-street-card border border-street-border space-y-2">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="font-bold text-white text-sm block">${item.name}</span>
+                                <span class="text-[11px] text-street-cheese">🔥 ${item.spice} • ${item.quantity} Portion(s)</span>
+                            </div>
+                            <button onclick="removeCartItem('${item.cartId}')" class="text-slate-500 hover:text-street-chili p-1 transition-colors">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+
+                        ${upgrades.length > 0 ? `
+                            <p class="text-[10px] text-slate-400 font-mono">+ ${upgrades.join(', ')}</p>
+                        ` : ''}
+
+                        ${item.note ? `
+                            <p class="text-[10px] text-slate-400 bg-street-black p-2 rounded-lg border border-street-border italic">
+                                Note: "${item.note}"
+                            </p>
+                        ` : ''}
+
+                        <div class="flex justify-between items-center pt-2 border-t border-street-border/60">
+                            <span class="text-[10px] text-slate-500 font-mono">ITEM TOTAL:</span>
+                            <span class="font-bold text-street-cheese text-sm">Rs. ${sub.toLocaleString()}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            list.innerHTML = html;
+            subtotalEl.innerText = `Rs. ${grand.toLocaleString()}`;
+            grandTotalEl.innerText = `Rs. ${grand.toLocaleString()}`;
+        }
+
+        function toggleReceiptCart(open) {
+            const drawer = document.getElementById('receipt-cart-sidebar');
+            const backdrop = document.getElementById('cart-backdrop');
+
+            if (open) {
+                backdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0');
+                setTimeout(() => backdrop.classList.add('hidden'), 300);
+            }
+        }
+
+        // WhatsApp Direct Order Dispatch
+        function dispatchToWhatsApp() {
+            if (cartItems.length === 0) {
+                showStreetToast("Your order slip is empty, machan!", "warning");
+                return;
+            }
+
+            const name = document.getElementById('client-name').value.trim() || 'Praza Foodie';
+            const address = document.getElementById('client-address').value.trim() || 'Marine Drive Pickup';
+
+            let grand = 0;
+            let lines = [];
+
+            cartItems.forEach((i, idx) => {
+                const sub = i.unitPrice * i.quantity;
+                grand += sub;
+
+                let extras = [];
+                if (i.extraCheese) extras.push("Extra Cheese (+Rs.350)");
+                if (i.extraGravy) extras.push("Extra Gravy (+Rs.100)");
+
+                const exStr = extras.length > 0 ? `\n   - Addons: ${extras.join(", ")}` : "";
+                const noteStr = i.note ? `\n   - Note: ${i.note}` : "";
+
+                lines.push(`${idx + 1}. *${i.name}* (${i.quantity}x)\n   - Spice: ${i.spice}${exStr}${noteStr}\n   - Subtotal: Rs. ${sub.toLocaleString()}`);
+            });
+
+            const msg = 
+`🔥 *PRAZA'S KOTTU KADE - NIGHT DISPATCH ORDER* 🔥
+=====================================
+👤 *Customer:* ${name}
+📍 *Address:* ${address}
+
+📋 *ORDER ITEMS:*
+${lines.join("\n\n")}
+
+=====================================
+💰 *NET GRAND TOTAL:* Rs. ${grand.toLocaleString()}
+🛵 *Packaging:* Sealed Hot Foil Box (FREE)
+=====================================
+Machan, please confirm the preparation and estimated delivery time!`;
+
+            const encoded = encodeURIComponent(msg);
+            const waUrl = `https://wa.me/94771234567?text=${encoded}`;
+            window.open(waUrl, '_blank');
+            showStreetToast("Opening WhatsApp with your hot order ticket!", "success");
+        }
+
+        // Custom Toast Engine
+        function showStreetToast(msg, type = 'info') {
+            const shelf = document.getElementById('toast-shelf');
+            const toast = document.createElement('div');
+
+            let icon = 'fa-info-circle';
+            let border = 'border-street-cheese';
+
+            if (type === 'success') {
+                icon = 'fa-check-circle';
+                border = 'border-street-neonGreen';
+            } else if (type === 'warning') {
+                icon = 'fa-fire';
+                border = 'border-street-chili';
+            }
+
+            toast.className = `pointer-events-auto flex items-center gap-3 px-5 py-3.5 rounded-2xl street-panel ${border} border shadow-2xl text-xs font-mono text-white transition-all duration-300 transform translate-y-3 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-street-cheese text-base"></i><span>${msg}</span>`;
+
+            shelf.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-3', 'opacity-0'), 20);
+            setTimeout(() => {
+                toast.classList.add('translate-y-3', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initEmbers();
+            renderReceiptCart();
+        });
+    </script>
+</body>
+</html>
